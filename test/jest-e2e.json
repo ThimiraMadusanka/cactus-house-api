@@ -1,0 +1,17 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "defaultLibraryPrefix/order/(.*)": "<rootDir>/../libs/order/src/$1",
+    "defaultLibraryPrefix/order": "<rootDir>/../libs/order/src"
+  }
+}
