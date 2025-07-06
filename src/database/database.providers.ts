@@ -1,16 +1,19 @@
 import { Sequelize } from 'sequelize-typescript';
+import { SEQUELIZE } from 'src/constants/constants';
+import { OrderModel } from 'src/order/entities/order.entity';
 
-export const databaseProviders = [
+export const DatabaseProviders = [
   {
-    provide: 'SEQUELIZE',
+    provide: SEQUELIZE,
     useFactory: async () => {
       const sequelize = new Sequelize({
         dialect: 'mysql',
-        host: 'localhost',
+        host: process.env.DBHOST,
         username: process.env.DBUSER,
         password: process.env.DBPASSWORD,
         database: process.env.DBNAME,
       });
+      sequelize.addModels([OrderModel]);
       sequelize
         .authenticate()
         .then(() => {
