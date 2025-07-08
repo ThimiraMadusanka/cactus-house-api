@@ -3,12 +3,15 @@ import { OrderCreateDto } from '../dto/orderCreate.dto';
 import { OrderUpdateDto } from '../dto/orderUpdate.dto';
 import { OrderModel } from '../entities/order.entity';
 import { ORDER, PENDING } from 'src/constants/constants';
+import { UserService } from 'src/user/service/user.service';
 
 @Injectable()
 export class OrderService {
   constructor(
     @Inject(ORDER)
     private Order: typeof OrderModel,
+
+    private readonly userService: UserService,
   ) {}
 
   async getOrders(page: number = 0, size: number = 10, status?: string) {
@@ -62,6 +65,8 @@ export class OrderService {
       contactNumber,
       shippingAddress,
     } = orderCreateDto;
+
+    await this.userService.getUserById(userRid);
 
     const order = await this.Order.create({
       userRid: userRid,
