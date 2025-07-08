@@ -1,22 +1,42 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { ChatService } from '../service/chat.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+} from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
+import { ChatResourceService } from '../service/chatResource.service';
+import { ConversationService } from '../service/conversation.service';
 import { ChatResourceCreateDto } from '../dto/chatResourceCreate.dto';
 import { ChatResourceUpdateDto } from '../dto/chatResourceUpdate.dto';
+import { ConverstionCreateDto } from '../dto/conversationCreate.dto';
+import { OpenAiService } from '../service/openAi.service';
+import { ASSISTANT, USER } from 'src/constants/constants';
 
 @Controller('/v1/chat')
 export class ChatController {
-  constructor(private chatService: ChatService) {}
+  constructor(
+    private chatResourceService: ChatResourceService,
+    private conversationService: ConversationService,
+    private openAiService: OpenAiService,
+  ) {}
 
   @Get('/resource/:id')
   async getChatResource(@Param('id') id: any) {
-    return await this.chatService.getChatResource(id);
+    return await this.chatResourceService.getChatResource(id);
   }
 
   @Post('/resource')
   async createChatResource(
     @Body() chatResourceCreateDto: ChatResourceCreateDto,
   ) {
-    return await this.chatService.createChatResource(chatResourceCreateDto);
+    return await this.chatResourceService.createChatResource(
+      chatResourceCreateDto,
+    );
   }
 
   @Put('/resource/:id')
@@ -24,6 +44,58 @@ export class ChatController {
     @Param('id') id: any,
     @Body() chatResourceUpdateDto: ChatResourceUpdateDto,
   ) {
-    return await this.chatService.updateChatResource(id, chatResourceUpdateDto);
+    return await this.chatResourceService.updateChatResource(
+      id,
+      chatResourceUpdateDto,
+    );
+  }
+
+  @Get('/messages')
+  async getMessages(@Req() req) {
+    const sessionId = req.cookies.session_id;
+    return await this.conversationService.getMessages(sessionId);
+  }
+
+  @Post('/message')
+  async message(
+    @Req() req,
+    @Res({ passthrough: true }) res,
+    @Body() converstionCreateDto: ConverstionCreateDto,
+  ) {
+    let sessionId = req.cookies.session_id;
+
+    if (!sessionId) {
+      sessionId = uuidv4();
+      res.cookie('session_id', sessionId, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      });
+    }
+
+    const content = await this.chatResourceService.getChatResource(1);
+
+    // save user msg
+    await this.conversationService.saveConversation(
+      sessionId,
+      converstionCreateDto,
+      USER,
+    );
+
+    // get previous converstions belong to sessionId
+    const conversation =
+      await this.conversationService.getConversationsForOpenAi(sessionId);
+
+    // get auto reply from openAI
+    const reply = await this.openAiService.autoReply(
+      conversation,
+      content.description,
+    );
+
+    // save auto reply
+    await this.conversationService.saveConversation(
+      sessionId,
+      { messageContent: reply },
+      ASSISTANT,
+    );
   }
 }

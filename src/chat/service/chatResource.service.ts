@@ -5,7 +5,7 @@ import { ChatResourceCreateDto } from '../dto/chatResourceCreate.dto';
 import { ChatResourceUpdateDto } from '../dto/chatResourceUpdate.dto';
 
 @Injectable()
-export class ChatService {
+export class ChatResourceService {
   constructor(
     @Inject(CHAT_RESOURCE)
     private ChatResource: typeof ChatResourceModel,

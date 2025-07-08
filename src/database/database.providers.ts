@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import { ChatResourceModel } from 'src/chat/entities/chatResource.entity';
+import { ConversationModel } from 'src/chat/entities/conversation.entity';
 import { SEQUELIZE } from 'src/constants/constants';
 import { ContactModel } from 'src/contact/entities/contact.entity';
 import { OrderModel } from 'src/order/entities/order.entity';
@@ -20,6 +21,7 @@ export const DatabaseProviders = [
         OrderModel,
         ContactModel,
         ChatResourceModel,
+        ConversationModel,
         UserModel,
       ]);
       sequelize
