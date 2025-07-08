@@ -2,6 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { SEQUELIZE } from 'src/constants/constants';
 import { ContactModel } from 'src/contact/entities/contact.entity';
 import { OrderModel } from 'src/order/entities/order.entity';
+import { UserModel } from 'src/user/entities/user.entity';
 
 export const DatabaseProviders = [
   {
@@ -14,7 +15,7 @@ export const DatabaseProviders = [
         password: process.env.DBPASSWORD,
         database: process.env.DBNAME,
       });
-      sequelize.addModels([OrderModel, ContactModel]);
+      sequelize.addModels([OrderModel, ContactModel, UserModel]);
       sequelize
         .authenticate()
         .then(() => {

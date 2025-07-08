@@ -1,12 +1,68 @@
-import { Controller, Get } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { UserService } from '../service/user.service';
+import { UserCreateDto } from '../dto/userCreate.dto';
+import { UserUpdateDto } from '../dto/userUpdate.dto';
+import { UserResetPasswordDto } from '../dto/userResetPassword.dto';
 
 @Controller('/v1/user')
 export class UserController {
   constructor(private userService: UserService) {}
 
   @Get()
-  async getUsers() {
-    return await this.userService.getUsers();
+  async getUsers(
+    @Query('page') page: number,
+    @Query('size') size: number,
+    @Query('status') status?: string,
+  ) {
+    return await this.userService.getUsers(page, size, status);
+  }
+
+  @Get('/:id')
+  async getUserById(@Param('id') id: any) {
+    return await this.userService.getUserById(id);
+  }
+
+  @Post()
+  @HttpCode(201)
+  async createUser(@Body() userCreateDto: UserCreateDto) {
+    return await this.userService.createUser(userCreateDto);
+  }
+
+  @Put('/:id')
+  async updateUser(@Param('id') id: any, @Body() userUpdateDto: UserUpdateDto) {
+    return await this.userService.updateUser(id, userUpdateDto);
+  }
+
+  @Patch('/password/:id')
+  async resetPasswordUser(
+    @Param('id') id: any,
+    @Body() userResetPasswordDto: UserResetPasswordDto,
+  ) {
+    return await this.userService.resetPasswordUser(id, userResetPasswordDto);
+  }
+
+  @Patch('/:id')
+  async userStatusChange(
+    @Param('id') id: any,
+    @Query('status') status: string,
+  ) {
+    return await this.userService.userStatusChange(id, status);
+  }
+
+  @Delete('/:id')
+  @HttpCode(204)
+  async deleteUser(@Param('id') id: any) {
+    return await this.userService.deleteUser(id);
   }
 }
