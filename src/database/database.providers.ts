@@ -4,6 +4,7 @@ import { ConversationModel } from 'src/chat/entities/conversation.entity';
 import { SEQUELIZE } from 'src/constants/constants';
 import { ContactModel } from 'src/contact/entities/contact.entity';
 import { OrderModel } from 'src/order/entities/order.entity';
+import { ProductModel } from 'src/product/entities/product.entity';
 import { UserModel } from 'src/user/entities/user.entity';
 
 export const DatabaseProviders = [
@@ -23,6 +24,7 @@ export const DatabaseProviders = [
         ChatResourceModel,
         ConversationModel,
         UserModel,
+        ProductModel,
       ]);
       sequelize
         .authenticate()
