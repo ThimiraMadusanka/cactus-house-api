@@ -56,14 +56,46 @@ export class UserService {
     return user;
   }
 
+  async getUserByEmail(email: string) {
+    const user = await this.User.findOne({
+      where: {
+        email: email,
+      },
+      raw: true,
+    });
+
+    if (user === null) {
+      throw new HttpException(
+        `User not found with this ${email} email.`,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    return user;
+  }
+
   async createUser(userCreateDto: UserCreateDto) {
     const { name, email, password, contactNumber, billingAddress } =
       userCreateDto;
 
+    const user = await this.User.findOne({
+      where: {
+        email: email,
+      },
+      raw: true,
+    });
+
+    if (user !== null) {
+      throw new HttpException(
+        `Already user exsit with this ${email} email.`,
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const user = await this.User.create({
+    const newUser = await this.User.create({
       name: name,
       email: email,
       password: hashedPassword,
@@ -73,7 +105,7 @@ export class UserService {
       status: ACTIVE,
     });
 
-    return user.toJSON();
+    return newUser.toJSON();
   }
 
   async updateUser(id: any, userUpdateDto: UserUpdateDto) {
