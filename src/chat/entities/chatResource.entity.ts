@@ -26,12 +26,6 @@ export class ChatResourceModel extends Model<ChatResourceModel> {
   description: string;
 
   @Column({
-    field: 'images',
-    type: DataType.TEXT,
-  })
-  images: string;
-
-  @Column({
     field: 'created_time',
     type: DataType.DATE,
   })

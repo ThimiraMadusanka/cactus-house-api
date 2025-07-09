@@ -30,11 +30,10 @@ export class ChatResourceService {
   }
 
   async createChatResource(chatResourceCreateDto: ChatResourceCreateDto) {
-    const { description, images } = chatResourceCreateDto;
+    const { description } = chatResourceCreateDto;
 
     const chatResource = await this.ChatResource.create({
       description: description,
-      images: images,
     });
 
     return chatResource.toJSON();
@@ -58,12 +57,11 @@ export class ChatResourceService {
       );
     }
 
-    const { description, images } = chatResourceUpdateDto;
+    const { description } = chatResourceUpdateDto;
 
     await this.ChatResource.update(
       {
         description: description,
-        images: images,
         updatedAt: new Date(),
       },
       {
