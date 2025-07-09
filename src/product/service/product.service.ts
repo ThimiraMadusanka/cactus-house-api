@@ -4,12 +4,15 @@ import { ACTIVE, PRODUCT } from 'src/constants/constants';
 import { ProductModel } from '../entities/product.entity';
 import { ProductUpdateDto } from '../dto/productUpdate.dto';
 import { ProductCreateDto } from '../dto/productCreate.dto';
+import { AWSService } from 'src/aws/service/aws.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @Inject(PRODUCT)
     private Product: typeof ProductModel,
+
+    private readonly awsService: AWSService,
   ) {}
 
   async getProducts(
@@ -74,8 +77,22 @@ export class ProductService {
   }
 
   async createProduct(productCreateDto: ProductCreateDto) {
-    const { name, description, price, quantity, imageUrl, tags } =
-      productCreateDto;
+    const {
+      name,
+      description,
+      price,
+      quantity,
+      fileContent,
+      fileName,
+      contentType,
+      tags,
+    } = productCreateDto;
+
+    const imageUrl = await this.awsService.fileUpload(
+      fileContent,
+      fileName,
+      contentType,
+    );
 
     const product = await this.Product.create({
       name: name,
@@ -105,8 +122,22 @@ export class ProductService {
       );
     }
 
-    const { name, description, price, quantity, imageUrl, tags } =
-      productUpdateDto;
+    const {
+      name,
+      description,
+      price,
+      quantity,
+      fileContent,
+      fileName,
+      contentType,
+      tags,
+    } = productUpdateDto;
+
+    const imageUrl = await this.awsService.fileUpload(
+      fileContent,
+      fileName,
+      contentType,
+    );
 
     await this.Product.update(
       {

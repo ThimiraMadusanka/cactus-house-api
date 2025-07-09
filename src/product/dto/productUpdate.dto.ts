@@ -10,7 +10,11 @@ export class ProductUpdateDto {
   @IsNotEmpty()
   quantity: number;
   @IsNotEmpty()
-  imageUrl: string;
+  fileContent: string;
+  @IsNotEmpty()
+  fileName: string;
+  @IsNotEmpty()
+  contentType: string;
   @IsNotEmpty()
   tags: string;
 }

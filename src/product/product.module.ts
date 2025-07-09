@@ -3,9 +3,10 @@ import { DatabaseModule } from 'src/database/database.module';
 import { ProductController } from './controller/product.controller';
 import { ProductService } from './service/product.service';
 import { ProductProvider } from './providers/product.provider';
+import { AWSModule } from 'src/aws/aws.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, AWSModule],
   controllers: [ProductController],
   providers: [ProductService, ...ProductProvider],
 })
