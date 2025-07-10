@@ -6,6 +6,7 @@ import { ForgetPasswordDto } from '../dto/forgetPassword.dto';
 import { ResetPasswordDto } from '../dto/resetPassword.dto';
 import { UserService } from 'src/user/service/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { ACTIVE, DEACTIVE } from 'src/constants/constants';
 
 @Injectable()
 export class AuthenticationService {
@@ -26,10 +27,12 @@ export class AuthenticationService {
       throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
 
-    const payload = { sub: user.id, email: user.email, type: user.type };
+    if (user.status === DEACTIVE) {
+      await this.userService.userStatusChange(user.id, ACTIVE);
+    }
 
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(user),
     };
   }
 
@@ -42,13 +45,13 @@ export class AuthenticationService {
 
     const user = await this.userService.getUserByEmail(email);
 
-    const payload = { sub: user.id, email: user.email };
+    const payload = { id: user.id, email: user.email };
     return {
       access_token: await this.jwtService.signAsync(payload),
     };
   }
 
-  async resetPassword(token, resetPasswordDto: ResetPasswordDto) {
+  async resetPassword(token: string, resetPasswordDto: ResetPasswordDto) {
     const { newPassword, confirmPassword } = resetPasswordDto;
 
     if (newPassword !== confirmPassword) {
@@ -58,9 +61,9 @@ export class AuthenticationService {
       );
     }
 
-    const { sub } = this.jwtService.decode(token);
+    const { id } = this.jwtService.decode(token);
 
-    return await this.userService.resetPasswordUser(sub, {
+    return await this.userService.resetPasswordUser(id, {
       password: newPassword,
     });
   }

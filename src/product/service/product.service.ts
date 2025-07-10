@@ -20,23 +20,23 @@ export class ProductService {
     size: number = 10,
     status?: string,
     tag?: string,
+    name?: string,
+    price?: string,
   ) {
     const offset = (page - 1) * size;
-    let whereClause: any;
+    const whereClause: any = {};
 
-    if (status && tag) {
-      whereClause = {
-        tags: { [Op.like]: `%${tag}%` },
-        status: status,
-      };
-    } else if (status) {
-      whereClause = {
-        status: status,
-      };
-    } else if (tag) {
-      whereClause = {
-        tags: { [Op.like]: `%${tag}%` },
-      };
+    if (status) {
+      whereClause.status = status;
+    }
+    if (tag) {
+      whereClause.tags = { [Op.like]: `%${tag}%` };
+    }
+    if (name) {
+      whereClause.name = { [Op.like]: `%${name}%` };
+    }
+    if (price) {
+      whereClause.price = { [Op.like]: `%${price}%` };
     }
 
     const productList = await this.Product.findAndCountAll({

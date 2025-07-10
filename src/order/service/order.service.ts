@@ -31,11 +31,15 @@ export class OrderService {
       raw: true,
     });
 
+    const list = orderList.rows.map((item) => {
+      return { ...item, tags: JSON.parse(item.productList) };
+    });
+
     return {
       page: page,
       size: size,
       totalCount: orderList.count,
-      data: orderList.rows,
+      data: list,
     };
   }
 
@@ -54,7 +58,7 @@ export class OrderService {
       );
     }
 
-    return order;
+    return { ...order, productList: JSON.parse(order.productList) };
   }
 
   async createOrder(orderCreateDto: OrderCreateDto) {
@@ -70,7 +74,7 @@ export class OrderService {
 
     const order = await this.Order.create({
       userRid: userRid,
-      productList: productList,
+      productList: JSON.stringify(productList),
       totalAmount: totalAmount,
       contactNumber: contactNumber,
       shippingAddress: shippingAddress,
@@ -107,7 +111,7 @@ export class OrderService {
 
     await this.Order.update(
       {
-        productList: productList,
+        productList: JSON.stringify(productList),
         totalAmount: totalAmount,
         contactNumber: contactNumber,
         shippingAddress: shippingAddress,

@@ -16,5 +16,5 @@ export class ProductCreateDto {
   @IsNotEmpty()
   contentType: string;
   @IsNotEmpty()
-  tags: string;
+  tags: string[];
 }

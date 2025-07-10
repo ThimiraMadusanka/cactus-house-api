@@ -16,5 +16,5 @@ export class ProductUpdateDto {
   @IsNotEmpty()
   contentType: string;
   @IsNotEmpty()
-  tags: string;
+  tags: string[];
 }

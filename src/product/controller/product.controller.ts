@@ -24,8 +24,17 @@ export class ProductController {
     @Query('size') size: number,
     @Query('status') status?: string,
     @Query('tag') tag?: string,
+    @Query('name') name?: string,
+    @Query('price') price?: string,
   ) {
-    return await this.productService.getProducts(page, size, status, tag);
+    return await this.productService.getProducts(
+      page,
+      size,
+      status,
+      tag,
+      name,
+      price,
+    );
   }
 
   @Get('/:id')
