@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { ChatModule } from './chat/chat.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { AWSModule } from './aws/aws.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AWSModule } from './aws/aws.module';
     DatabaseModule,
     AWSModule,
     OrderModule,
+    CartModule,
     ProductModule,
     ContactModule,
     UserModule,

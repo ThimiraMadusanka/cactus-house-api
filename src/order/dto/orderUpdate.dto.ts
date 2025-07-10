@@ -5,6 +5,7 @@ type Product = {
   name: string;
   image: string;
   price: string;
+  amount: string;
 };
 
 export class OrderUpdateDto {

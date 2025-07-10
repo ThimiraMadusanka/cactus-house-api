@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
+import { CartModel } from 'src/cart/entities/cart.entity';
 import { ChatResourceModel } from 'src/chat/entities/chatResource.entity';
 import { ConversationModel } from 'src/chat/entities/conversation.entity';
 import { SEQUELIZE } from 'src/constants/constants';
@@ -25,6 +26,7 @@ export const DatabaseProviders = [
         ConversationModel,
         UserModel,
         ProductModel,
+        CartModel,
       ]);
       sequelize
         .authenticate()

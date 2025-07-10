@@ -9,5 +9,6 @@ import { AWSModule } from 'src/aws/aws.module';
   imports: [DatabaseModule, AWSModule],
   controllers: [ProductController],
   providers: [ProductService, ...ProductProvider],
+  exports: [ProductService],
 })
 export class ProductModule {}
