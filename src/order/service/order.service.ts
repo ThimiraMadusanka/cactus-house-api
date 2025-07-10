@@ -4,6 +4,7 @@ import { OrderUpdateDto } from '../dto/orderUpdate.dto';
 import { OrderModel } from '../entities/order.entity';
 import { ORDER, PENDING } from 'src/constants/constants';
 import { UserService } from 'src/user/service/user.service';
+import { CartService } from 'src/cart/service/cart.service';
 
 @Injectable()
 export class OrderService {
@@ -12,6 +13,8 @@ export class OrderService {
     private Order: typeof OrderModel,
 
     private readonly userService: UserService,
+
+    private readonly cartService: CartService,
   ) {}
 
   async getOrders(page: number = 0, size: number = 10, status?: string) {
@@ -79,6 +82,10 @@ export class OrderService {
       contactNumber: contactNumber,
       shippingAddress: shippingAddress,
       status: PENDING,
+    });
+
+    productList.map(async (item) => {
+      await this.cartService.removeFromCart(item.cartId);
     });
 
     return order.toJSON();
