@@ -29,6 +29,16 @@ export class OrderController {
     return await this.orderService.getOrders(page, size, status);
   }
 
+  @Get('/user')
+  @Auth('USER')
+  async getOrdersByUserId(
+    @Query('page') page: number,
+    @Query('size') size: number,
+    @Query('user_id') userId: number,
+  ) {
+    return await this.orderService.getOrdersByUserId(page, size, userId);
+  }
+
   @Get('/:id')
   @Auth('USER', 'ADMIN')
   async getOrderById(@Param('id') id: any) {

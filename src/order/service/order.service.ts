@@ -46,6 +46,30 @@ export class OrderService {
     };
   }
 
+  async getOrdersByUserId(page: number = 0, size: number = 10, userId: number) {
+    const offset = (page - 1) * size;
+
+    const orderList = await this.Order.findAndCountAll({
+      limit: size,
+      offset: offset,
+      where: {
+        userRid: userId,
+      },
+      raw: true,
+    });
+
+    const list = orderList.rows.map((item) => {
+      return { ...item, tags: JSON.parse(item.productList) };
+    });
+
+    return {
+      page: page,
+      size: size,
+      totalCount: orderList.count,
+      data: list,
+    };
+  }
+
   async getOrderById(id: any) {
     const order = await this.Order.findOne({
       where: {
