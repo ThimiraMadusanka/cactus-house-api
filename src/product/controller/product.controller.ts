@@ -13,6 +13,7 @@ import {
 import { ProductService } from '../service/product.service';
 import { ProductCreateDto } from '../dto/productCreate.dto';
 import { ProductUpdateDto } from '../dto/productUpdate.dto';
+import { Auth } from 'src/authentication/decorator/auth.decorator';
 
 @Controller('/v1/products')
 export class ProductController {
@@ -43,12 +44,14 @@ export class ProductController {
   }
 
   @Post()
+  @Auth('ADMIN')
   @HttpCode(201)
   async createProduct(@Body() productCreateDto: ProductCreateDto) {
     return await this.productService.createProduct(productCreateDto);
   }
 
   @Put('/:id')
+  @Auth('ADMIN')
   async updateProduct(
     @Param('id') id: any,
     @Body() productUpdateDto: ProductUpdateDto,
@@ -57,6 +60,7 @@ export class ProductController {
   }
 
   @Patch('/:id')
+  @Auth('ADMIN')
   async productStatusChange(
     @Param('id') id: any,
     @Query('status') status: string,
@@ -65,6 +69,7 @@ export class ProductController {
   }
 
   @Delete('/:id')
+  @Auth('ADMIN')
   @HttpCode(204)
   async deleteProduct(@Param('id') id: any) {
     return await this.productService.deleteProduct(id);

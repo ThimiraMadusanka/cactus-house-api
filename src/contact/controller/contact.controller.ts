@@ -11,12 +11,14 @@ import {
 } from '@nestjs/common';
 import { ContactService } from '../service/contact.service';
 import { ContactCreateDto } from '../dto/contactCreate.dto';
+import { Auth } from 'src/authentication/decorator/auth.decorator';
 
 @Controller('/v1/contact')
 export class ContactController {
   constructor(private contactService: ContactService) {}
 
   @Get()
+  @Auth('ADMIN')
   async getContacts(
     @Query('page') page: number,
     @Query('size') size: number,
@@ -26,6 +28,7 @@ export class ContactController {
   }
 
   @Get('/:id')
+  @Auth('ADMIN')
   async getContactById(@Param('id') id: any) {
     return await this.contactService.getContactById(id);
   }
@@ -37,6 +40,7 @@ export class ContactController {
   }
 
   @Patch('/:id')
+  @Auth('ADMIN')
   async contactStatusChange(
     @Param('id') id: any,
     @Query('status') status: string,
@@ -45,6 +49,7 @@ export class ContactController {
   }
 
   @Delete('/:id')
+  @Auth('ADMIN')
   @HttpCode(204)
   async deleteContact(@Param('id') id: any) {
     return await this.contactService.deleteContact(id);

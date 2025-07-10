@@ -16,6 +16,7 @@ import { ChatResourceUpdateDto } from '../dto/chatResourceUpdate.dto';
 import { ConverstionCreateDto } from '../dto/conversationCreate.dto';
 import { OpenAiService } from '../service/openAi.service';
 import { ASSISTANT, USER } from 'src/constants/constants';
+import { Auth } from 'src/authentication/decorator/auth.decorator';
 
 @Controller('/v1/chat')
 export class ChatController {
@@ -26,11 +27,13 @@ export class ChatController {
   ) {}
 
   @Get('/resource/:id')
+  @Auth('ADMIN')
   async getChatResource(@Param('id') id: any) {
     return await this.chatResourceService.getChatResource(id);
   }
 
   @Post('/resource')
+  @Auth('ADMIN')
   async createChatResource(
     @Body() chatResourceCreateDto: ChatResourceCreateDto,
   ) {
@@ -40,6 +43,7 @@ export class ChatController {
   }
 
   @Put('/resource/:id')
+  @Auth('ADMIN')
   async updateChatResource(
     @Param('id') id: any,
     @Body() chatResourceUpdateDto: ChatResourceUpdateDto,

@@ -10,6 +10,7 @@ export const CONVERSATION = 'CONVERSATION';
 export const PRODUCT = 'PRODUCT';
 export const ASSISTANT = 'ASSISTANT';
 export const CART = 'CART';
+export const ROLES_KEY = 'roles';
 
 // Status
 export const PENDING = 'PENDING';
