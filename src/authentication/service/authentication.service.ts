@@ -33,6 +33,13 @@ export class AuthenticationService {
 
     return {
       access_token: await this.jwtService.signAsync(user),
+      user: {
+        name: user.name,
+        email: user.email,
+        contactNumber: user.contactNumber,
+        billingAddress: user.billingAddress,
+        type: user.type,
+      },
     };
   }
 
@@ -61,7 +68,7 @@ export class AuthenticationService {
       );
     }
 
-    const { id } = this.jwtService.decode(token);
+    const { id } = this.jwtService.decode(token.split(' ')[1]);
 
     return await this.userService.resetPasswordUser(id, {
       password: newPassword,
