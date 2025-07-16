@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class ChatResourceUpdateDto {
+export class ChatResourceCreateOrUpdateDto {
   @IsNotEmpty()
   description: string;
 }

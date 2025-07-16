@@ -34,6 +34,7 @@ export class AuthenticationService {
     return {
       access_token: await this.jwtService.signAsync(user),
       user: {
+        id: user.id,
         name: user.name,
         email: user.email,
         contactNumber: user.contactNumber,

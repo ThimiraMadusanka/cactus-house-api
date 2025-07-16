@@ -11,8 +11,7 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { ChatResourceService } from '../service/chatResource.service';
 import { ConversationService } from '../service/conversation.service';
-import { ChatResourceCreateDto } from '../dto/chatResourceCreate.dto';
-import { ChatResourceUpdateDto } from '../dto/chatResourceUpdate.dto';
+import { ChatResourceCreateOrUpdateDto } from '../dto/chatResourceCreateOrUpdate.dto';
 import { ConverstionCreateDto } from '../dto/conversationCreate.dto';
 import { OpenAiService } from '../service/openAi.service';
 import { ASSISTANT, USER } from 'src/constants/constants';
@@ -32,25 +31,15 @@ export class ChatController {
     return await this.chatResourceService.getChatResource(id);
   }
 
-  @Post('/resource')
-  @Auth('ADMIN')
-  async createChatResource(
-    @Body() chatResourceCreateDto: ChatResourceCreateDto,
-  ) {
-    return await this.chatResourceService.createChatResource(
-      chatResourceCreateDto,
-    );
-  }
-
   @Put('/resource/:id')
   @Auth('ADMIN')
-  async updateChatResource(
+  async createOrUpdateChatResource(
     @Param('id') id: any,
-    @Body() chatResourceUpdateDto: ChatResourceUpdateDto,
+    @Body() chatResourceCreateOrUpdateDto: ChatResourceCreateOrUpdateDto,
   ) {
-    return await this.chatResourceService.updateChatResource(
+    return await this.chatResourceService.createOrUpdateChatResource(
       id,
-      chatResourceUpdateDto,
+      chatResourceCreateOrUpdateDto,
     );
   }
 
