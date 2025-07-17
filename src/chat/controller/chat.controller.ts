@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Put,
-  Req,
-  Res,
-} from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ChatResourceService } from '../service/chatResource.service';
 import { ConversationService } from '../service/conversation.service';
 import { ChatResourceCreateOrUpdateDto } from '../dto/chatResourceCreateOrUpdate.dto';
@@ -44,39 +34,27 @@ export class ChatController {
   }
 
   @Get('/messages')
-  async getMessages(@Req() req) {
-    const sessionId = req.cookies.session_id;
-    return await this.conversationService.getMessages(sessionId);
+  async getMessages(@Query('session_id') session_id: string) {
+    return await this.conversationService.getMessages(session_id);
   }
 
   @Post('/message')
   async message(
-    @Req() req,
-    @Res({ passthrough: true }) res,
+    @Query('session_id') session_id: string,
     @Body() converstionCreateDto: ConverstionCreateDto,
   ) {
-    let sessionId = req.cookies.session_id;
-
-    if (!sessionId) {
-      sessionId = uuidv4();
-      res.cookie('session_id', sessionId, {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7,
-      });
-    }
-
     const content = await this.chatResourceService.getChatResource(1);
 
     // save user msg
     await this.conversationService.saveConversation(
-      sessionId,
+      session_id,
       converstionCreateDto,
       USER,
     );
 
-    // get previous converstions belong to sessionId
+    // get previous converstions belong to session_id
     const conversation =
-      await this.conversationService.getConversationsForOpenAi(sessionId);
+      await this.conversationService.getConversationsForOpenAi(session_id);
 
     // get auto reply from openAI
     const reply = await this.openAiService.autoReply(
@@ -86,7 +64,7 @@ export class ChatController {
 
     // save auto reply
     await this.conversationService.saveConversation(
-      sessionId,
+      session_id,
       { messageContent: reply },
       ASSISTANT,
     );
