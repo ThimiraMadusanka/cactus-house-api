@@ -16,6 +16,8 @@ export const ROLES_KEY = 'roles';
 export const PENDING = 'PENDING';
 export const ACTIVE = 'ACTIVE';
 export const DEACTIVE = 'DEACTIVE';
+export const DELIVERED = 'DELIVERED';
+export const REJECTED = 'REJECTED';
 
 // For AWS
 export const AWS_BUCKET_NAME = 'whatsapp-solutin';

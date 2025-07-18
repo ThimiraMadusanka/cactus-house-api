@@ -9,6 +9,7 @@ import { ChatModule } from './chat/chat.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { AWSModule } from './aws/aws.module';
 import { CartModule } from './cart/cart.module';
+import { SummaryModule } from './summary/summary.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CartModule } from './cart/cart.module';
     UserModule,
     ChatModule,
     AuthenticationModule,
+    SummaryModule,
   ],
 })
 export class AppModule {}
