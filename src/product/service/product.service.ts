@@ -133,11 +133,14 @@ export class ProductService {
       tags,
     } = productUpdateDto;
 
-    const imageUrl = await this.awsService.fileUpload(
-      fileContent,
-      fileName,
-      contentType,
-    );
+    let imageUrl: string = '';
+    if (fileContent !== '' && fileName !== '' && contentType !== '') {
+      imageUrl = await this.awsService.fileUpload(
+        fileContent,
+        fileName,
+        contentType,
+      );
+    }
 
     await this.Product.update(
       {
@@ -145,7 +148,7 @@ export class ProductService {
         description: description,
         price: price,
         quantity: quantity,
-        imageUrl: imageUrl,
+        imageUrl: imageUrl === '' ? product.imageUrl : imageUrl,
         tags: JSON.stringify(tags),
         status: ACTIVE,
         updatedAt: new Date(),

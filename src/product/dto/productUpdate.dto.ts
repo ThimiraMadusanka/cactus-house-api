@@ -9,11 +9,8 @@ export class ProductUpdateDto {
   price: string;
   @IsNotEmpty()
   quantity: number;
-  @IsNotEmpty()
   fileContent: string;
-  @IsNotEmpty()
   fileName: string;
-  @IsNotEmpty()
   contentType: string;
   @IsNotEmpty()
   tags: string[];
