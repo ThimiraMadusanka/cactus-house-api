@@ -7,13 +7,13 @@ export class SummaryController {
   constructor(private summaryService: SummaryService) {}
 
   @Get('/admin')
-  @Auth('ADMIN')
+  @Auth('USER', 'ADMIN')
   async getAdminSummary() {
     return await this.summaryService.getAdminSummary();
   }
 
   @Get('/account')
-  @Auth('ADMIN')
+  @Auth('USER', 'ADMIN')
   async getAccountSummary(@Query('user_id') userId: any) {
     return await this.summaryService.getAccountSummary(userId);
   }

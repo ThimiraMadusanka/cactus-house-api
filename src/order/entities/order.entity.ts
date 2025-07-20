@@ -5,7 +5,10 @@ import {
   DataType,
   PrimaryKey,
   AutoIncrement,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
+import { UserModel } from 'src/user/entities/user.entity';
 
 @Table({
   tableName: 'tbl_orders',
@@ -20,10 +23,20 @@ export class OrderModel extends Model<OrderModel> {
   id: number;
 
   @Column({
+    field: 'order_id',
+    type: DataType.TEXT,
+  })
+  orderId: string;
+
+  @ForeignKey(() => UserModel)
+  @Column({
     field: 'user_rid',
     type: DataType.SMALLINT,
   })
   userRid: number;
+
+  @BelongsTo(() => UserModel)
+  user: UserModel;
 
   @Column({
     field: 'product_list',

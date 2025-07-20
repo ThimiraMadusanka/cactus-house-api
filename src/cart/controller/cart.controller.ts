@@ -18,12 +18,8 @@ export class CartController {
 
   @Get('/all')
   @Auth('USER', 'ADMIN')
-  async getAllCartItemsByUserId(
-    @Query('page') page: number,
-    @Query('size') size: number,
-    @Query('user_id') userId: number,
-  ) {
-    return await this.cartService.getAllCartItemsByUserId(page, size, userId);
+  async getAllCartItemsByUserId(@Query('user_id') userId: number) {
+    return await this.cartService.getAllCartItemsByUserId(userId);
   }
 
   @Post('/add')

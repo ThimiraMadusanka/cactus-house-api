@@ -4,6 +4,7 @@ import { UserService } from 'src/user/service/user.service';
 import { CART } from 'src/constants/constants';
 import { CartModel } from '../entities/cart.entity';
 import { ProductService } from 'src/product/service/product.service';
+import { ProductModel } from 'src/product/entities/product.entity';
 
 @Injectable()
 export class CartService {
@@ -16,30 +17,18 @@ export class CartService {
     private readonly productService: ProductService,
   ) {}
 
-  async getAllCartItemsByUserId(
-    page: number = 0,
-    size: number = 10,
-    userId: number,
-  ) {
-    const offset = (page - 1) * size;
-
+  async getAllCartItemsByUserId(userId: number) {
     await this.userService.getUserById(userId);
 
     const cartList = await this.Cart.findAndCountAll({
-      limit: size,
-      offset: offset,
       where: {
         userRid: userId,
       },
+      include: [{ model: ProductModel }],
       raw: true,
     });
 
-    return {
-      page: page,
-      size: size,
-      totalCount: cartList.count,
-      data: cartList.rows,
-    };
+    return cartList.rows;
   }
 
   async addToCart(addToCartDto: AddToCartDto) {

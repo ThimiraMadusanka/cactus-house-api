@@ -5,7 +5,10 @@ import {
   DataType,
   PrimaryKey,
   AutoIncrement,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
+import { ProductModel } from 'src/product/entities/product.entity';
 
 @Table({
   tableName: 'tbl_cart',
@@ -25,11 +28,15 @@ export class CartModel extends Model<CartModel> {
   })
   userRid: number;
 
+  @ForeignKey(() => ProductModel)
   @Column({
     field: 'product_rid',
     type: DataType.SMALLINT,
   })
   productRid: number;
+
+  @BelongsTo(() => ProductModel)
+  product: ProductModel;
 
   @Column({
     field: 'amount',

@@ -5,6 +5,7 @@ import { OrderModel } from '../entities/order.entity';
 import { ORDER, PENDING } from 'src/constants/constants';
 import { UserService } from 'src/user/service/user.service';
 import { CartService } from 'src/cart/service/cart.service';
+import { UserModel } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class OrderService {
@@ -32,10 +33,11 @@ export class OrderService {
       offset: offset,
       where: whereClause,
       raw: true,
+      include: [{ model: UserModel }],
     });
 
     const list = orderList.rows.map((item) => {
-      return { ...item, tags: JSON.parse(item.productList) };
+      return { ...item, productList: JSON.parse(item.productList) };
     });
 
     return {
@@ -59,7 +61,7 @@ export class OrderService {
     });
 
     const list = orderList.rows.map((item) => {
-      return { ...item, tags: JSON.parse(item.productList) };
+      return { ...item, productList: JSON.parse(item.productList) };
     });
 
     return {
@@ -76,6 +78,7 @@ export class OrderService {
         id: id,
       },
       raw: true,
+      include: [{ model: UserModel }],
     });
 
     if (!order) {
@@ -100,6 +103,7 @@ export class OrderService {
     await this.userService.getUserById(userRid);
 
     const order = await this.Order.create({
+      orderId: 'ORDER' + Date.now() + Math.floor(Math.random() * 1000),
       userRid: userRid,
       productList: JSON.stringify(productList),
       totalAmount: totalAmount,
@@ -137,13 +141,10 @@ export class OrderService {
       );
     }
 
-    const { productList, totalAmount, contactNumber, shippingAddress } =
-      orderUpdateDto;
+    const { contactNumber, shippingAddress } = orderUpdateDto;
 
     await this.Order.update(
       {
-        productList: JSON.stringify(productList),
-        totalAmount: totalAmount,
         contactNumber: contactNumber,
         shippingAddress: shippingAddress,
         status: PENDING,
