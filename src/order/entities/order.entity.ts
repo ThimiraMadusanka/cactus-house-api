@@ -31,7 +31,7 @@ export class OrderModel extends Model<OrderModel> {
   @ForeignKey(() => UserModel)
   @Column({
     field: 'user_rid',
-    type: DataType.SMALLINT,
+    type: DataType.BIGINT,
   })
   userRid: number;
 

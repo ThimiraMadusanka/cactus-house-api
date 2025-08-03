@@ -39,7 +39,7 @@ export class ProductModel extends Model<ProductModel> {
 
   @Column({
     field: 'quantity',
-    type: DataType.NUMBER,
+    type: DataType.INTEGER,
   })
   quantity: number;
 

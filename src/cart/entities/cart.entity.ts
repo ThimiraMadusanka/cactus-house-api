@@ -24,14 +24,14 @@ export class CartModel extends Model<CartModel> {
 
   @Column({
     field: 'user_rid',
-    type: DataType.SMALLINT,
+    type: DataType.BIGINT,
   })
   userRid: number;
 
   @ForeignKey(() => ProductModel)
   @Column({
     field: 'product_rid',
-    type: DataType.SMALLINT,
+    type: DataType.BIGINT,
   })
   productRid: number;
 

@@ -14,10 +14,10 @@ export const DatabaseProviders = [
     useFactory: async () => {
       const sequelize = new Sequelize({
         dialect: 'mysql',
-        host: process.env.DBHOST,
-        username: process.env.DBUSER,
-        password: process.env.DBPASSWORD,
-        database: process.env.DBNAME,
+        host: process.env.DB_HOST,
+        username: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
       });
       sequelize.addModels([
         OrderModel,
@@ -30,8 +30,11 @@ export const DatabaseProviders = [
       ]);
       sequelize
         .authenticate()
-        .then(() => {
+        .then(async () => {
           console.log('Connected to database -> from Sequelize:');
+
+          await sequelize.sync();
+          console.log('Sequelize models synchronized');
         })
         .catch((ejs: any) => {
           console.log('Failed to connect to database -> from Sequelize', ejs);
