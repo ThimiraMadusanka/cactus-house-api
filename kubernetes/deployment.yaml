@@ -13,14 +13,13 @@ kind: Service
 metadata:
   name: cactus-house-backend
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: cactus-house-backend
   ports:
     - protocol: TCP
       port: 8081
       targetPort: 5000 
-      nodePort: 30081
 ---
 apiVersion: apps/v1
 kind: Deployment
