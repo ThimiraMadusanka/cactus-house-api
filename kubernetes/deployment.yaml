@@ -3,9 +3,7 @@ kind: Secret
 metadata:
   name: cactus-house-backend-secrets
 type: Opaque
-data:
-  DB_HOST: bXlzcWw=              
-  DB_PORT: MzMwNg==             
+data:           
   DB_USER: Y2FjdHVzdXNlcg==     
   DB_PASSWORD: Y2FjdHVzcGFzcw== 
   DB_NAME: Y2FjdHVzX2hvdXNl 
@@ -45,15 +43,9 @@ spec:
             - containerPort: 5000
           env:
             - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: cactus-house-backend-secrets
-                  key: DB_HOST
+              value: mysql
             - name: DB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: cactus-house-backend-secrets
-                  key: DB_PORT
+              value: "3306"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
