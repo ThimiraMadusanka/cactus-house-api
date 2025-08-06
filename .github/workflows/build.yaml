@@ -75,3 +75,8 @@ jobs:
       run: |
         kubectl apply -f deployment.yaml
         kubectl apply -f mysql.yaml
+    
+    - name: Restart Kubernetes Deployment
+      run: |
+        kubectl rollout restart deployment/cactus-house-backend
+        kubectl rollout restart deployment/mysql
